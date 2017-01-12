@@ -44,12 +44,38 @@ var global = {
   }
 };
 
-// var basepath = '';
+// ルート相対フラグ （true:ルート相対, false:ファイル相対 初期値false）
+var rootpath = false;
 
 // gulp-ejs
 gulp.task('ejs', function () {
+  var initpath = process.env.INIT_CWD + '\\src\\';
+
+  // 相対パスを算出するための関数
+  function calcPath (workPath, ejsPath) {
+    var lengthSlash = (ejsPath.replace(workPath, '').match(/\\/g)||[]).length
+    var basePath = '.';
+
+    // スラッシュの数に応じてパスを作成する
+    if (lengthSlash > 0){
+      basePath = '';
+      for (i = 0; i < lengthSlash; i++) {
+        basePath = basePath + '../'
+      }
+      basePath = basePath.slice(0, -1);
+    }
+
+    // rootpathがtrueの場合はルート相対とする。
+    if (rootpath === true) {
+      basePath = '';
+    }
+
+    return basePath;
+  };
+
+  // ejs変換
   return gulp.src([global.ejs, global.excludeFile.ejs])
-    .pipe(ejs({basepath}))
+    .pipe(ejs({rootpath, initpath, calcPath}))
     .pipe(rename(function (path) {
       path.extname = '.html';
     }))
