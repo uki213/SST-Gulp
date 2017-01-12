@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <%
+  path = '.';
+
+  title = 'ページタイトル';
+  description = 'サイトデスクリプション';
+  keyword = 'キーワード';
+  %>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="<%= description %>">
+    <meta name="keywords" content="<%= keyword %>" />
+    <title><%= title %></title>
+    <link href="<%= path %>/css/style.css" rel="stylesheet">
+    <link href="<%= path %>/css/index.css" rel="stylesheet">
+    <%- include('_include/_script.ejs') %>
+    <script src="<%= path %>/js/index.js"></script>
+    <script>
+      const PATH = '<%= path %>';
+    </script>
+  </head>
+
+  <body>
+    <%- include('_include/_header.ejs') %>
+
+    <div class="contents">
+      <p>コンテンツが入ります</p>
+      <%- include('_include/_block.ejs', {data: 'test'}) %>
+    </div>
+
+    <%- include('_include/_footer.ejs') %>
+  </body>
+</html>
