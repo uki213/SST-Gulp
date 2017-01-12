@@ -44,12 +44,14 @@ var global = {
   }
 };
 
+// 作業フォルダの設定
+var initpath = process.env.INIT_CWD + '\\src\\';
+
 // ルート相対フラグ （true:ルート相対, false:ファイル相対 初期値false）
 var rootpath = false;
 
 // gulp-ejs
 gulp.task('ejs', function () {
-  var initpath = process.env.INIT_CWD + '\\src\\';
 
   // 相対パスを算出するための関数
   function calcPath (workPath, ejsPath) {
