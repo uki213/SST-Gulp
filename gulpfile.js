@@ -15,7 +15,9 @@ var less = require('gulp-less');
 var cleanCSS = require('gulp-clean-css');
 var sourcemaps = require('gulp-sourcemaps');
 var LessAutoprefix = require('less-plugin-autoprefix');
-var autoprefix = new LessAutoprefix({ browsers: ['last 5 versions'] });
+var autoprefix = new LessAutoprefix({
+  browsers: ['last 5 versions']
+});
 
 // gulp-sass
 var sass = require('gulp-sass');
@@ -42,10 +44,12 @@ var global = {
   }
 };
 
+// var basepath = '';
+
 // gulp-ejs
 gulp.task('ejs', function () {
   return gulp.src([global.ejs, global.excludeFile.ejs])
-    .pipe(ejs())
+    .pipe(ejs({basepath}))
     .pipe(rename(function (path) {
       path.extname = '.html';
     }))
@@ -53,7 +57,14 @@ gulp.task('ejs', function () {
       indent_with_tabs: false,
       indent_size: 2,
       max_preserve_newlines: 1,
-      preserve_newlines: true
+      preserve_newlines: true,
+      unformatted: [
+        'b', 'big', 'i', 'small', 'tt', 'abbr', 'acronym',
+        'cite', 'code', 'dfn', 'em', 'kbd', 'strong', 'samp',
+        'time', 'var', 'a', 'bdo', 'br', 'img', 'map', 'object',
+        'q', 'span', 'sub', 'sup', 'button', 'input',
+        'label', 'select', 'textarea',
+      ]
     }))
     .pipe(gulp.dest(global.dist));
 });
@@ -67,7 +78,12 @@ gulp.task('less', function () {
         this.emit('end');
       }
     }))
-    .pipe(less({ sourceMap: { sourceMapFileInline: true }, plugins: [autoprefix] }))
+    .pipe(less({
+      sourceMap: {
+        sourceMapFileInline: true
+      },
+      plugins: [autoprefix]
+    }))
     .pipe(sourcemaps.init())
     .pipe(cleanCSS())
     .pipe(sourcemaps.write('sourcemaps'))
@@ -94,7 +110,9 @@ gulp.task('less-build', function () {
 gulp.task('sass', function () {
   return gulp.src([global.scss, global.excludeFile.scss])
     .pipe(sourcemaps.init())
-    .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+    .pipe(sass({
+      outputStyle: 'compressed'
+    }).on('error', sass.logError))
     .pipe(sourcemaps.write('sourcemaps'))
     .pipe(gulp.dest(global.dist));
 });
@@ -102,7 +120,9 @@ gulp.task('sass', function () {
 // gulp-scss (Exclusion SOURCEMAP)
 gulp.task('sass-build', function () {
   return gulp.src([global.scss, global.excludeFile.scss])
-    .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+    .pipe(sass({
+      outputStyle: 'compressed'
+    }).on('error', sass.logError))
     .pipe(gulp.dest(global.dist));
 });
 
@@ -181,4 +201,3 @@ gulp.task('lint', function () {
     .pipe(eslint.failAfterError())
     .pipe(plumber.stop());
 });
-
