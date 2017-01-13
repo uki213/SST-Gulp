@@ -55,7 +55,9 @@ gulp.task('ejs', function () {
 
   // 相対パスを算出するための関数
   function calcPath (workPath, ejsPath) {
-    var lengthSlash = (ejsPath.replace(workPath, '').match(/\\/g)||[]).length
+    var workPathReplaced = workPath.replace(/\//g, '\\');
+    var ejsPathReplaced = ejsPath.replace(/\//g, '\\');
+    var lengthSlash = (ejsPathReplaced.replace(workPathReplaced, '').match(/\\/g)||[]).length
     var basePath = '.';
 
     // スラッシュの数に応じてパスを作成する
