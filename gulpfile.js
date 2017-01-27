@@ -10,9 +10,6 @@ var ejs = require('gulp-ejs');
 var rename = require('gulp-rename');
 var prettify = require('gulp-prettify');
 
-// ejs modules
-var setPath = require('./ejs_modules/setPath');
-
 // gulp-less
 var less = require('gulp-less');
 var cleanCSS = require('gulp-clean-css');
@@ -47,17 +44,21 @@ var global = {
   }
 };
 
-// 作業フォルダの設定
-var initpath = process.env.INIT_CWD + '\\src\\';
 
-// ルート相対フラグ （true:ルート相対, false:ファイル相対 初期値false）
-var rootpath = false;
+// ejs modules
+var setPath = require('./ejs_modules/setPath');
+var setPathArray = {
+  // ルート相対フラグ （true:ルート相対, false:ファイル相対 初期値false）
+  rootpath: false,
+  // 作業フォルダの設定
+  initpath: process.env.INIT_CWD + '\\src\\'
+}
 
 // gulp-ejs
 gulp.task('ejs', function () {
   // ejs変換
   return gulp.src([global.ejs, global.excludeFile.ejs])
-    .pipe(ejs({rootpath, initpath, setPath}))
+    .pipe(ejs({ setPathArray, setPath }))
     .pipe(rename(function (path) {
       path.extname = '.html';
     }))

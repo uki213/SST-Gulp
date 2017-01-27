@@ -1,5 +1,5 @@
-var ejsModule = function (workPath, ejsPath, rootpath) {
-  var workPathReplaced = workPath.replace(/\//g, '\\');
+var setPath = function (setPathArray, ejsPath) {
+  var workPathReplaced = setPathArray.initpath.replace(/\//g, '\\');
   var ejsPathReplaced = ejsPath.replace(/\//g, '\\');
   var lengthSlash = (ejsPathReplaced.replace(workPathReplaced, '').match(/\\/g) || []).length
   var basePath = '.';
@@ -14,10 +14,10 @@ var ejsModule = function (workPath, ejsPath, rootpath) {
   }
 
   // rootpathがtrueの場合はルート相対とする。
-  if (rootpath === true) {
+  if (setPathArray.rootpath === true) {
     basePath = '';
   }
 
   return basePath;
 }
-module.exports = ejsModule;
+module.exports = setPath;
