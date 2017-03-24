@@ -56,6 +56,7 @@ var setPathArray = {
 
 // gulp-ejs
 gulp.task('ejs', function () {
+
   // ejs変換
   return gulp.src([global.ejs, global.excludeFile.ejs])
     .pipe(ejs({ setPathArray, setPath }))

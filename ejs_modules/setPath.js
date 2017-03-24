@@ -1,4 +1,5 @@
 var setPath = function (setPathArray, ejsPath) {
+	
   var workPathReplaced = setPathArray.initpath.replace(/\//g, '\\');
   var ejsPathReplaced = ejsPath.replace(/\//g, '\\');
   var lengthSlash = (ejsPathReplaced.replace(workPathReplaced, '').match(/\\/g) || []).length
