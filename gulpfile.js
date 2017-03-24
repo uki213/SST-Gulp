@@ -23,7 +23,7 @@ var autoprefix = new LessAutoprefix({
 var sass = require('gulp-sass');
 
 // gulp-webserver
-var webserver = require('gulp-webserver');
+var browserSync = require('browser-sync').create();
 
 // eslint
 var eslint = require('gulp-eslint');
@@ -148,14 +148,12 @@ gulp.task('build-copy', function () {
 });
 
 // Webサーバー
-gulp.task('connect', function () {
-  gulp.src(global.dist)
-    .pipe(webserver({
-      fallback: 'index.html',
-      livereload: true,
-      open: true,
-      port: 8080
-    }));
+gulp.task('browser-sync', function() {
+    browserSync.init({
+        server: {
+            baseDir: global.dist
+        }
+    });
 });
 
 // watch
@@ -178,7 +176,7 @@ gulp.task('delete-build', function (cb) {
 
 // Default
 gulp.task('default', function (callback) {
-  runSequence(['less', 'sass', 'ejs', 'copy'], 'connect', 'watch', callback);
+  runSequence(['less', 'sass', 'ejs', 'copy'], 'browser-sync', 'watch', callback);
 });
 
 // build 納品ファイル作成
