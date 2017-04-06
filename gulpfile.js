@@ -153,7 +153,9 @@ gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
             baseDir: global.dist
-        }
+        },
+        open: 'external', //localhostではなくローカルIPでWebサーバー立ち上げ
+        startPath: './'　//初期表示ページを指定
     });
 });
 
