@@ -6,7 +6,6 @@
   "scripts": {
     "start": "gulp default",
     "build": "gulp build",
-    "less": "gulp less",
     "scss": "gulp sass",
     "sass": "gulp sass",
     "ejs": "gulp ejs",
@@ -17,20 +16,18 @@
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.18.8",
-    "eslint": "^3.18.0",
+    "eslint": "^4.6.1",
     "gulp": "^3.9.1",
     "gulp-clean-css": "^3.0.4",
     "gulp-ejs": "^3.0.0",
-    "gulp-eslint": "^3.0.1",
-    "gulp-less": "^3.0.3",
+    "gulp-eslint": "^4.0.0",
     "gulp-plumber": "^1.0.1",
     "gulp-prettify": "^0.5.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
     "gulp-sourcemaps": "^2.3.1",
-    "less-plugin-autoprefix": "^1.5.1",
     "node-notifier": "^5.1.2",
     "rimraf": "^2.4.0",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^2.1.0"
   }
 }
