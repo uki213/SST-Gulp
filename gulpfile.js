@@ -10,17 +10,9 @@ var ejs = require('gulp-ejs');
 var rename = require('gulp-rename');
 var prettify = require('gulp-prettify');
 
-// gulp-less
-var less = require('gulp-less');
-var cleanCSS = require('gulp-clean-css');
-var sourcemaps = require('gulp-sourcemaps');
-var LessAutoprefix = require('less-plugin-autoprefix');
-var autoprefix = new LessAutoprefix({
-  browsers: ['last 5 versions']
-});
-
-// gulp-sass
+// css
 var sass = require('gulp-sass');
+var sourcemaps = require('gulp-sourcemaps');
 
 // gulp-webserver
 var browserSync = require('browser-sync').create();
@@ -33,12 +25,10 @@ var global = {
   src: './src',
   dist: './dist',
   build: './build',
-  less: './src/**/*.less',
   scss: './src/**/*.scss',
   ejs: './src/**/*.ejs',
   js: './src/**/*.js',
   excludeFile: {
-    less: '!./src/**/_*.less',
     scss: '!./src/**/_*.scss',
     ejs: '!./src/**/_*.ejs'
   }
@@ -79,43 +69,6 @@ gulp.task('ejs', function () {
     .pipe(gulp.dest(global.dist));
 });
 
-// gulp-less
-gulp.task('less', function () {
-  return gulp.src([global.less, global.excludeFile.less])
-    .pipe(plumber({
-      errorHandler: function (err) {
-        console.log(err);
-        this.emit('end');
-      }
-    }))
-    .pipe(less({
-      sourceMap: {
-        sourceMapFileInline: true
-      },
-      plugins: [autoprefix]
-    }))
-    .pipe(sourcemaps.init())
-    .pipe(cleanCSS())
-    .pipe(sourcemaps.write('sourcemaps'))
-    .pipe(gulp.dest(global.dist));
-});
-
-// gulp-less (Exclusion SOURCEMAP)
-gulp.task('less-build', function () {
-  return gulp.src([global.less, global.excludeFile.less])
-    .pipe(less({
-      plugins: [autoprefix]
-    }))
-    .pipe(plumber({
-      errorHandler: function (err) {
-        console.log(err);
-        this.emit('end');
-      }
-    }))
-    .pipe(cleanCSS())
-    .pipe(gulp.dest(global.dist));
-});
-
 // gulp-scss
 gulp.task('sass', function () {
   return gulp.src([global.scss, global.excludeFile.scss])
@@ -138,7 +91,7 @@ gulp.task('sass-build', function () {
 
 // fileCopy
 gulp.task('copy', function () {
-  return gulp.src([global.src + '/**/*.*', '!' + global.ejs, '!' + global.less, '!' + global.scss])
+  return gulp.src([global.src + '/**/*.*', '!' + global.ejs, '!' + global.scss])
     .pipe(gulp.dest(global.dist));
 });
 
@@ -163,8 +116,7 @@ gulp.task('browser-sync', function() {
 gulp.task('watch', ['copy'], function () {
   gulp.watch([global.ejs, global.excludeFile.ejs], ['ejs']);
   gulp.watch([global.scss, global.excludeFile.scss], ['sass']);
-  gulp.watch([global.less, global.excludeFile.less], ['less']);
-  gulp.watch([global.src + '/**/*.*', global.excludeFile.less, global.excludeFile.ejs], ['copy']);
+  gulp.watch([global.src + '/**/*.*', global.excludeFile.ejs], ['copy']);
 });
 
 // delete-dist
@@ -179,12 +131,12 @@ gulp.task('delete-build', function (cb) {
 
 // Default
 gulp.task('default', function (callback) {
-  runSequence(['less', 'sass', 'ejs', 'copy'], 'browser-sync', 'watch', callback);
+  runSequence(['sass', 'ejs', 'copy'], 'browser-sync', 'watch', callback);
 });
 
 // build 納品ファイル作成
 gulp.task('build', function (callback) {
-  runSequence('delete-dist', ['less-build', 'sass-build', 'ejs', 'copy'], 'delete-build', 'build-copy', 'delete-dist', callback);
+  runSequence('delete-dist', ['sass-build', 'ejs', 'copy'], 'delete-build', 'build-copy', 'delete-dist', callback);
 });
 
 // eslint
