@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>sitemap</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div class="bd-pageheader">
+      <div class="container">
+        <h1>サイトマップ</h1>
+        <p>sitemap.xmlに書き出された情報を元に、ファイルリストとしてテーブルに出力されます。</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Page Name</th>
+              <th>URL</th>
+            </tr>
+          </thead>
+          <tbody id="sitemap"></tbody>
+        </table>
+      </div>
+    </div>
+    <script type="text/babel">
+      (function ($) {
+        'use strict';
+
+        // sitemapファイルの取得
+        function getSitemap () {
+          return $.ajax({
+            url: 'sitemap.xml',
+            type: 'GET',
+            dataType: 'xml',
+            async: false
+          })
+        }
+
+        // sitemapファイルの処理
+        getSitemap().done((result) => {
+          $(result).find('loc').each((i, el) => {
+            var url = $(el).text();
+            var fileName = url;
+            var fileTitle = null;
+
+            function getFileName() {
+              return $.ajax({
+                url: fileName,
+                type: 'GET',
+                dataType: 'html',
+                async: false
+              })
+            }
+
+            getFileName().done((fileData) => {
+              fileTitle = $(fileData).find('title').text();
+              $('#sitemap').append(`<tr><th scope="row">${i}</th><td><a href="${url}">${fileTitle}</a></td><td><a href="${url}">${url}</a></td></tr>`);
+            }).fail((fileData) => {
+              console.log('Error! Can\'t get file.');
+            })
+
+          })
+        }).fail((result) => {
+          console.log('Error! Can\'t get sitemap.xml.');
+        });
+
+      }(jQuery));
+    </script>
+  </body>
+</html>

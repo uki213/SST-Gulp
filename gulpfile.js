@@ -20,6 +20,10 @@ var browserSync = require('browser-sync').create();
 // eslint
 var eslint = require('gulp-eslint');
 
+// sitemap
+var sitemap = require('gulp-sitemap');
+
+
 // 共通変数
 var global = {
   src: './src',
@@ -69,6 +73,17 @@ gulp.task('ejs', function () {
     .pipe(gulp.dest(global.dist));
 });
 
+// sitemap
+gulp.task('sitemap', function () {
+  gulp.src([global.dist + '/**/*.html', '!' + global.dist + '/_filelist.html'], {
+      read: false
+    })
+    .pipe(sitemap({
+      siteUrl: './'
+    }))
+    .pipe(gulp.dest(global.dist));
+});
+
 // gulp-scss
 gulp.task('sass', function () {
   return gulp.src([global.scss, global.excludeFile.scss])
@@ -108,7 +123,7 @@ gulp.task('browser-sync', function() {
             baseDir: global.dist
         },
         open: 'external', //localhostではなくローカルIPでWebサーバー立ち上げ
-        startPath: './'　//初期表示ページを指定
+        startPath: './_filelist.html'　//初期表示ページを指定
     });
 });
 
@@ -131,7 +146,7 @@ gulp.task('delete-build', function (cb) {
 
 // Default
 gulp.task('default', function (callback) {
-  runSequence(['sass', 'ejs', 'copy'], 'browser-sync', 'watch', callback);
+  runSequence(['sass', 'ejs', 'copy'], 'sitemap', 'browser-sync', 'watch', callback);
 });
 
 // build 納品ファイル作成
