@@ -12,7 +12,10 @@ var prettify = require('gulp-prettify');
 
 // css
 var sass = require('gulp-sass');
+var sassGlob = require('gulp-sass-glob');
 var sourcemaps = require('gulp-sourcemaps');
+var autoprefixer = require('gulp-autoprefixer');
+var gcmq = require('gulp-group-css-media-queries');
 
 // gulp-webserver
 var browserSync = require('browser-sync').create();
