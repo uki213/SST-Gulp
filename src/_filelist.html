@@ -63,7 +63,7 @@
             }
 
             getFileName().done((fileData) => {
-              fileTitle = $(fileData).find('title').text();
+              var fileTitle = fileData.match(/<title>(.*)<\/title>/)[1];
               $('#sitemap').append(`<tr><th scope="row">${i}</th><td><a href="${url}">${fileTitle}</a></td><td><a href="${url}">${url}</a></td></tr>`);
             }).fail((fileData) => {
               console.log('Error! Can\'t get file.');
